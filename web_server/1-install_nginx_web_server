@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+# Install and configure Nginx to serve "Holberton School for the win!" on port 80
 echo -e "Updating and installing Nginx.\n"
 sudo apt-get update -y -qq && \
 	 sudo apt-get install nginx -y
