@@ -1,15 +1,5 @@
 #!/usr/bin/env bash
-# This script configures Nginx to listen on port 80 of all active IPv4 IP
-
-# Install Nginx
-apk update
-apk add nginx
-
-# Create index.html with the required content
-echo "Hello Holberton" > /var/www/localhost/htdocs/index.html
-
-# Start Nginx
-nginx
-
-# Reload to apply any config changes
-nginx -s reload
+# Automate fix for server to listen on port 80
+rm /etc/nginx/sites-enabled/default
+ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+sudo service nginx restart
