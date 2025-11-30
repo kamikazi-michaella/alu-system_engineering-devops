@@ -2,15 +2,24 @@
 # Install and configure Nginx to serve "Holberton School for the win!" on port 80
 # Install nginx and serve a page with "Holberton School"
 
-# Update package list and install nginx
 apt-get update -y
 apt-get install -y nginx
 
-# Make sure the web root exists
-mkdir -p /var/www/html
+# Detect nginx web root
+NGINX_ROOT=$(grep -R "root " /etc/nginx/sites-enabled/ | head -n1 | awk '{print $2}' | tr -d ';')
+if [ -z "$NGINX_ROOT" ]; then
+    NGINX_ROOT="/var/www/html"
+fi
 
-# Serve the exact required page
-echo "Holberton School" > /var/www/html/index.html
+# Create web root if missing
+mkdir -p $NGINX_ROOT
+
+# Write the required page
+echo "Holberton School" > $NGINX_ROOT/index.html
+
+# Set correct permissions
+chmod 644 $NGINX_ROOT/index.html
+chown -R www-data:www-data $NGINX_ROOT
 
 # Restart nginx
 service nginx restart
