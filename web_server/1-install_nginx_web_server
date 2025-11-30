@@ -1,79 +1,16 @@
 #!/usr/bin/env bash
 # Install and configure Nginx to serve "Holberton School for the win!" on port 80
-echo -e "Updating and installing Nginx.\n"
-sudo apt-get update -y -qq && \
-	 sudo apt-get install nginx -y
-sudo apt update && sudo apt install ufw -y
-echo -e "\nSetting up some minor stuff.\n"
+# Install nginx and serve a page with "Holberton School"
 
-# starting nginx service
-sudo service nginx start
+# Update package list and install nginx
+apt-get update -y
+apt-get install -y nginx
 
-# allowing nginx on firewall
-sudo ufw allow 'Nginx HTTP'
-sudo ufw enable
+# Make sure the web root exists
+mkdir -p /var/www/html
 
-# Give the user ownership to website files for easy editing
-sudo chown -R "$USER":"$USER" /var/www/html
-sudo chmod -R 755 /var/www
+# Serve the exact required page
+echo "Holberton School" > /var/www/html/index.html
 
-# Backup default index
-cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bckp
-
-# Creating new index
-echo -e "Hello World!" | dd status=none of=/var/www/html/index.nginx-debian.html
-
-# Restarting nginx
-sudo service nginx restart
-
-echo -e "\nCompleted. ✅\n"
-=======
-# Configures a new Ubuntu machine by installing Nginx and setting up a webpage
-
-echo -e "Updating and installing Nginx.\n"
-sudo apt-get update -y -qq && \
-    sudo apt-get install nginx -y
-
-echo -e "\nSetting up some minor stuff.\n"
-
-# Start Nginx service
-sudo service nginx start
-
-# Allow HTTP traffic through the firewall
-sudo ufw allow 'Nginx HTTP'
-
-# Give the user ownership of website files for easy editing
-sudo chown -R "$USER":"$USER" /var/www/html
-sudo chmod -R 755 /var/www
-
-# Backup default index page
-cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bckp
-
-server_config=\
-"server {
-		listen 80 default_server;
-		listen [::]:80 default_server;
-		root /var/www/html;
-		index index.html index.htm index.nginx-debian.html
-		server_name_;
-		add_header X-Served-By \$hostname;
-		location / {
-			try_files \$uri \$uri/ =404;
-		}
-		if (\$request_filename ~ redirect_me){
-			rewrite ^ https://th3-gr00t.tk/ permanent;
-		}
-		error_page 404 /error_404.html;
-		location = /error_404.html {
-			internal;
-		}
-}"
-# Create a new index page with "Holberton School"
-echo -e "Holberton School" | dd status=none of=/var/www/html/index.nginx-debian.html
-
-
-# Restart Nginx to apply changes
-sudo service nginx restart
-
-echo -e "\nCompleted. ✅\n"
-
+# Restart nginx
+service nginx restart
