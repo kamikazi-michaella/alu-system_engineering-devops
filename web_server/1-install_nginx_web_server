@@ -1,25 +1,18 @@
 #!/usr/bin/env bash
 # Install and configure Nginx to serve "Holberton School for the win!" on port 80
-# Install nginx and serve a page with "Holberton School"
 
+# Update and install nginx
 apt-get update -y
-apt-get install -y nginx
+apt-get install nginx -y
 
-# Detect nginx web root
-NGINX_ROOT=$(grep -R "root " /etc/nginx/sites-enabled/ | head -n1 | awk '{print $2}' | tr -d ';')
-if [ -z "$NGINX_ROOT" ]; then
-    NGINX_ROOT="/var/www/html"
-fi
+# Remove default page
+rm -f /var/www/html/index.nginx-debian.html
 
-# Create web root if missing
-mkdir -p $NGINX_ROOT
+# Create Holberton School page
+echo "Holberton School for the win!" > /var/www/html/index.html
 
-# Write the required page
-echo "Holberton School" > $NGINX_ROOT/index.html
+# Stop any existing nginx process
+pkill nginx 2>/dev/null
 
-# Set correct permissions
-chmod 644 $NGINX_ROOT/index.html
-chown -R www-data:www-data $NGINX_ROOT
-
-# Restart nginx
-service nginx restart
+# Start nginx manually
+nginx
